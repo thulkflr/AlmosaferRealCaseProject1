@@ -3,6 +3,7 @@ package AlmosaferRealCaseProject.AlmosaferRealCaseProject;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
 
 import org.openqa.selenium.By;
@@ -29,10 +30,10 @@ public class AppTest {
 
 	}
 
-	@Test(priority = 1)
-	public void checkWebsiteLanguage() {
+	@Test(priority = 1, enabled = true)
+	public void checkWebsiteLanguage(String expectedResult) {
 		String actualResult = driver.findElement(By.tagName("html")).getDomAttribute("lang");
-		String expectedResult = "en";
+
 		Assert.assertEquals(actualResult, expectedResult);
 
 	}
@@ -67,31 +68,70 @@ public class AppTest {
 
 	}
 
-	@Test(priority = 4)
-	public void verifySearchTabIsNotSelectedByDefault() {
-		boolean stayesTab = driver.findElement(By.linkText("Stays")).isSelected();
-		String actualResult = driver.findElement(By.linkText("+966554400000")).getText();
+	@Test(priority = 5)
+	public void verifySearchTabIsNotSelectedByDefault() throws InterruptedException {
+//		driver.findElement(By.linkText("Stays")).click();
+		Thread.sleep(2000);
+		WebElement stayesTab = driver.findElement(By.id("uncontrolled-tab-example-tab-hotels"));
+		String isSelected = stayesTab.getDomAttribute("aria-selected");
+		String expectedResult = "false";
+		System.out.println(isSelected);
 
-		System.out.println(stayesTab);
-
-		Assert.assertEquals(stayesTab, false);
+		Assert.assertEquals(isSelected, expectedResult);
 
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 6)
 	public void checkFlightDepatureDateTodayPlusOneDay() {
-		String actualResult = driver.findElement(By.tagName(".sc-bYTsla.sc-dlyikq.XbXIU")).findElement(By.cssSelector(".sc-bEufUU.kyMhih")).getText();
+		List<WebElement> getDates = driver.findElements(By.cssSelector(".sc-dXfzlN.iPVuSG"));
+				
+String actualResult=getDates.get(0).getText();
+		LocalDate currentDate = LocalDate.now();
 
-		LocalDate currentDate = LocalDate.now() ;
+		int plusOneDay = currentDate.plusDays(1).getDayOfMonth();
+		String expectedResult= String.format("%02d", plusOneDay);
+		System.out.println("Hellllllooooooo" + 				
+				actualResult+" "+expectedResult);
+		
 
-		int expectedResult = currentDate.getDayOfMonth();
-		System.out.println("Hellllllooooooo"+actualResult);
+		Assert.assertEquals(actualResult, expectedResult);
+	}
+
+	@Test(priority = 7)
+	public void checkFlightReturnDateTodayPlusTowDays() {
+		List<WebElement> getDates = driver.findElements(By.cssSelector(".sc-dXfzlN.iPVuSG"));
+				
+String actualResult=getDates.get(1).getText();
+		LocalDate currentDate = LocalDate.now();
+
+		int plusTowDays = currentDate.plusDays(2).getDayOfMonth();
+		String expectedResult= String.format("%02d", plusTowDays);
+		System.out.println("Hellllllooooooo" + 				
+				actualResult+" "+expectedResult);
+		
+
+		Assert.assertEquals(actualResult, expectedResult);
+	}
+	
+	@Test(priority = 8, invocationCount = 9)
+	public void randomChangingLanguage() {
+		
+		String[] webSiteLangs= {"https://www.almosafer.com/en","https://www.almosafer.com/ar"};
+	Random random =new Random();
+		int index= random.nextInt(webSiteLangs.length);
+		driver.get(webSiteLangs[index]);
+		
+		if (driver.getCurrentUrl().contains("en"))
+		{
+			checkWebsiteLanguage("en");
+		}
+		else {
+
+			checkWebsiteLanguage("ar");	
+		}
+	}
 
 	
-
-		//Assert.assertEquals(actualResult, expectedResult+1);
-	}
-
 	@AfterTest
 	public void endTest() throws InterruptedException {
 		Thread.sleep(3000);

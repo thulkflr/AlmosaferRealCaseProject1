@@ -5,8 +5,8 @@
     <classes>
       <class name="AlmosaferRealCaseProject.AlmosaferRealCaseProject.AppTest">
         <methods>
-          <include name="checkFlightDepatureDateTodayPlusOneDay"/>
           <include name="endTest"/>
+          <include name="checkWebsiteLanguage"/>
           <include name="setup"/>
         </methods>
       </class> <!-- AlmosaferRealCaseProject.AlmosaferRealCaseProject.AppTest -->
