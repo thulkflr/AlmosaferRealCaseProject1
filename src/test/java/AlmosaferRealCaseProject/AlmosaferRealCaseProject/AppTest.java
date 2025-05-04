@@ -113,7 +113,7 @@ String actualResult=getDates.get(1).getText();
 		Assert.assertEquals(actualResult, expectedResult);
 	}
 	
-	@Test(priority = 8, invocationCount = 9)
+	@Test(priority = 8, invocationCount = 10)
 	public void randomChangingLanguage() {
 		
 		String[] webSiteLangs= {"https://www.almosafer.com/en","https://www.almosafer.com/ar"};
